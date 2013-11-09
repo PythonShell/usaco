@@ -1,0 +1,45 @@
+/*
+ID: python1
+PROG: crypt1
+LANG: C++
+*/
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+bool IsIn(int num, int *set, int size);
+
+int main() {
+        ofstream fout("crypt1.out");
+        ifstream fin("crypt1.in");
+        int num, *set, count=0, first, no1, no2, result;
+        fin >> num;
+        set = new int[num];
+        for(int i=0; i<num; i++)
+                fin >> set[i];
+        for(int i=0; i<num; i++) {
+                for(int j=0; j<num; j++) {
+                        for(int k=0; k<num; k++) {
+                                first = set[i] + 10*set[j] + 100*set[k];
+                                for(int m; m<num; m++) {
+                                        no1 = first * set[m];
+                                        for(int n; n<num; n++) {
+                                                no2 = first * set[n];
+                                                result = no2*10 + no1;
+                                                cout << first << " * " << set[n] << set[m] << " = "
+                                                << no1 << " + " << no2 * 10 << " = " << result << endl;
+                                                count++;
+                                        }
+                                }
+                        }
+                }
+        }
+        fout << count << endl;
+        return 0;
+}
+
+bool IsIn(int num, int *set, int size) {
+        for(int i=0; i<size; i++)
+                if(num==set[i]) return true;
+        return false;
+}
