@@ -1,0 +1,15 @@
+Executing...
+   Test 1: TEST OK [0.000 secs, 3520 KB]
+   Test 2: TEST OK [0.000 secs, 3524 KB]
+   Test 3: TEST OK [0.000 secs, 3520 KB]
+   Test 4: TEST OK [0.000 secs, 3520 KB]
+   Test 5: TEST OK [0.011 secs, 3520 KB]
+   Test 6: TEST OK [0.140 secs, 3520 KB]
+   Test 7: TEST OK [2.041 secs, 3520 KB]
+   Test 8: TEST OK [4.990 secs, 3520 KB]
+   Test 9: TEST OK [4.730 secs, 3524 KB]
+
+   All tests OK.
+   YOUR PROGRAM ('ariprog') WORKED FIRST TIME!  That's fantastic
+   -- and a rare thing.  Please accept these special automated
+   congratulations.
