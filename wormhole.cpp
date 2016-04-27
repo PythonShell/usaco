@@ -7,7 +7,9 @@ LANG: C++
 #include<fstream>
 #include<string>
 #include<vector>
+#include<queue>
 #include<utility>
+#include<algorithm>
 
 #define MAX 999999999
 using namespace std;
@@ -50,18 +52,52 @@ int main() {
     int number_hole=0;
     int result=0;
     fin >> number_hole;
+    vector<short> total_nodes;
     Hole holes[number_hole];
     for(int i=0; i<number_hole; i++) {
         int x, y;
         fin >> x >> y;
         holes[i] = Hole(x, y);
+        total_nodes.push_back(i);
     }
+    // initial walk to
     for(int i=0; i<number_hole; i++) {
         Hole* tmp = walkTo(*(holes+i), holes, number_hole);
         (holes+i)->setWalk(tmp);
     }
-    for(int i=0; i<(number_hole/2); i++) {
-        makePair(holes+i, holes+number_hole/2+i);
+
+    queue<situation> situations;
+    for(int i=1; i<number_hole; i++) {
+        situation tmp;
+        tmp.push_back(connection(0, i));
+        situations.push(tmp);
+    }
+    while(!situations.empty()) {
+        situation current_sit = situations.front();
+        if(current_sit.size()==(number_hole/2)) {
+            makePairs(holes, number_hole, current_sit);
+            if (existCircle(holes, number_hole)) {
+                result += 1;
+            }
+        } else {
+            vector<short> remains = total_nodes;
+            vector<short> used;
+            for(int i=0; i<current_sit.size(); i++) {
+                used.push_back(current_sit[i].first);
+                used.push_back(current_sit[i].second);
+            }
+            sort(used.begin(), used.end());
+            for(int i=used.size(); i>0; i--) {
+                remains.erase(remains.begin()+used[i-1]);
+            }
+            for(int i=1; i<remains.size(); i++) {
+                connection tmp(remains[0], remains[i]);
+                situation newone = current_sit;
+                newone.push_back(tmp);
+                situations.push(newone);
+            }
+        }
+        situations.pop();
     }
 
     for(int i=0; i<number_hole; i++) {
@@ -104,6 +140,7 @@ inline void makePairs(Hole* holes, int length, situation sit) {
 }
 
 bool existCircle(Hole* holes, int length) {
+    // not implement yet
     return true;
 }
 
