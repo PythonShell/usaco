@@ -24,13 +24,10 @@ class mycomparison {
             bool N_l = lhs&1;
             bool N_r = lhs&1;
             if(index_lx > index_rx) return true;
-            else if(index_lx == index_rx && index_ly > index_ry) return true;
-            else if(index_lx == index_rx && index_ly== index_ry && !N_l)
-                return true;
-            /*
-            else if(index_ly > index_ry) return true;
+            else if(index_lx < index_rx) return false;
+            else if(index_ly < index_ry) return true;
+            else if(index_ly > index_ly) return false;
             else if(!N_l) return true;
-            */
             else return false;
         };
 };
