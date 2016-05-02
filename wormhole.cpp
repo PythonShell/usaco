@@ -45,6 +45,8 @@ inline void makePair(Hole* first, Hole* second);
 inline void makePairs(Hole* holes, int length, situation sit);
 // judge wether a circle exists currently
 bool existCircle(Hole* holes, int length);
+// judge wether a circle exists when start at some point
+vector<Hole*> existCircle(Hole* holes, int length, int start);
 
 int main() {
     ofstream fout("wormhole.out");
@@ -100,6 +102,7 @@ int main() {
         situations.pop();
     }
 
+    /*
     for(int i=0; i<number_hole; i++) {
         if(((holes+i)->getWalk())==NULL) cout << "no.";
         else cout << "yes!";
@@ -108,6 +111,7 @@ int main() {
         else cout << "yes!";
         cout << endl;
     }
+    */
     fout << result << endl;
     return 0;
 }
@@ -140,7 +144,47 @@ inline void makePairs(Hole* holes, int length, situation sit) {
 }
 
 bool existCircle(Hole* holes, int length) {
-    // not implement yet
-    return true;
+    for(int i=0; i<length; i++) {
+        if((holes+i)->getWalk()!=NULL) {
+            vector<Hole*> circle = existCircle(holes, length, i);
+            if(circle.size()!=0) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
+vector<Hole*> existCircle(Hole* holes, int length, int start) {
+    vector<Hole*> visited;
+    bool next_walk=true;
+    visited.push_back(holes+start);
+    Hole current_hole = *(holes + start);
+    while(true) {
+        if(next_walk && current_hole.getWalk()==NULL) {
+            break;
+        } else if(next_walk && current_hole.getWalk()!=NULL) {
+            Hole* next_ptr = current_hole.getWalk();
+            for(short i=0; i<visited.size()/2+1; i++) {
+                if(next_ptr==visited[2*i+1])
+                    return visited;
+            }
+            visited.push_back(next_ptr);
+            current_hole = *next_ptr;
+            next_walk = !next_walk;
+        } else if(!next_walk && current_hole.getTravel()==NULL) {
+            break;
+        } else if(!next_walk && current_hole.getTravel()!=NULL) {
+            Hole* next_ptr = current_hole.getTravel();
+            for(short i=0; i<visited.size()/2+1; i++) {
+                if(next_ptr==visited[2*i])
+                    return visited;
+            }
+            visited.push_back(next_ptr);
+            current_hole = *next_ptr;
+            next_walk = !next_walk;
+        }
+    }
+    visited.resize(0);
+    return visited;
+}
