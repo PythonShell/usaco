@@ -67,14 +67,17 @@ class Castle {
         };
         void caculate() {
             number_of_rooms = 0;
+            maximum_room_size = -1;
             vector<bool> visited(size_x*size_y, false);
             for(int i=0; i<visited.size(); i++) {
                 queue<int> to_be_visited;
                 if(!visited[i]) {
                     number_of_rooms += 1;
+                    int room_size = 0;
                     to_be_visited.push(i);
                     while(!to_be_visited.empty()) {
                         cout << "hello" << endl;
+                        room_size += 1;
                         int current = to_be_visited.front();
                         visited[current] = true;
                         if(!cells[current].getWest() && !visited[current-1])
@@ -89,6 +92,8 @@ class Castle {
                             to_be_visited.push(current+size_x);
                         to_be_visited.pop();
                     }
+                    if(room_size > maximum_room_size)
+                        maximum_room_size = room_size;
                 }
             }
         };
