@@ -165,10 +165,6 @@ vector<Hole*> existCircle(Hole* holes, int length, int start) {
             break;
         } else if(next_walk && current_hole.getWalk()!=NULL) {
             Hole* next_ptr = current_hole.getWalk();
-            for(short i=0; i<visited.size()/2+1; i++) {
-                if(next_ptr==visited[2*i+1])
-                    return visited;
-            }
             visited.push_back(next_ptr);
             current_hole = *next_ptr;
             next_walk = !next_walk;
@@ -176,9 +172,8 @@ vector<Hole*> existCircle(Hole* holes, int length, int start) {
             break;
         } else if(!next_walk && current_hole.getTravel()!=NULL) {
             Hole* next_ptr = current_hole.getTravel();
-            for(short i=0; i<visited.size()/2+1; i++) {
-                if(next_ptr==visited[2*i])
-                    return visited;
+            if (next_ptr == (holes+start)) {
+                return visited;
             }
             visited.push_back(next_ptr);
             current_hole = *next_ptr;
