@@ -134,8 +134,12 @@ class Castle {
                     int room_size = 0;
                     to_be_visited.push(i);
                     while(!to_be_visited.empty()) {
-                        room_size += 1;
                         int current = to_be_visited.front();
+                        if(visited[current]) {
+                            to_be_visited.pop();
+                            continue;
+                        }
+                        room_size += 1;
                         visited[current] = true;
                         if(!cells[current].getWest() && !visited[current-1])
                             to_be_visited.push(current-1);
