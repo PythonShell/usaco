@@ -26,7 +26,7 @@ class mycomparison {
             if(index_lx > index_rx) return true;
             else if(index_lx < index_rx) return false;
             else if(index_ly < index_ry) return true;
-            else if(index_ly > index_ly) return false;
+            else if(index_ly > index_ry) return false;
             else if(!N_l) return true;
             else return false;
         };
@@ -185,36 +185,44 @@ int main() {
     }
     castle.buildWalls(values);
     castle.caculate();
+    int number_of_rooms = castle.getNumberOfRooms();
+    int maximum_room_size = castle.getMaximumRoomSize();
     fout << castle.getNumberOfRooms() << endl;
     fout << castle.getMaximumRoomSize() << endl;
     int maximum_merged_room_size=-1;
     vector<int> solutions;
-    for(int i=0; i<size_x*size_y; i++) {
-        if(castle.wallRemovable(i, true)) {
-            castle.removeWall(i, true);
-            castle.caculate();
-            int temp_size = castle.getMaximumRoomSize();
-            if(temp_size>maximum_merged_room_size) {
-                maximum_merged_room_size = temp_size;
-                solutions.resize(0);
-                solutions.push_back((i<<1)+1);
-            } else if(temp_size==maximum_merged_room_size) {
-                solutions.push_back((i<<1)+1);
+    bool no_search_flag = false;
+    for(int y_pos=size_y-1; y_pos>-1&&!no_search_flag; y_pos--) {
+        for(int x_pos=0; x_pos<size_x&&!no_search_flag; x_pos++) {
+            int i = y_pos*size_x + x_pos;
+            if(castle.wallRemovable(i, true)) {
+                castle.removeWall(i, true);
+                castle.caculate();
+                int temp_size = castle.getMaximumRoomSize();
+                if(temp_size>maximum_merged_room_size) {
+                    maximum_merged_room_size = temp_size;
+                    solutions.resize(0);
+                    solutions.push_back((i<<1)+1);
+                } else if(temp_size==maximum_merged_room_size) {
+                    solutions.push_back((i<<1)+1);
+                }
+                castle.addWall(i, true);
             }
-            castle.addWall(i, true);
-        }
-        if(castle.wallRemovable(i, false)) {
-            castle.removeWall(i, false);
-            castle.caculate();
-            int temp_size = castle.getMaximumRoomSize();
-            if(temp_size>maximum_merged_room_size) {
-                maximum_merged_room_size = temp_size;
-                solutions.resize(0);
-                solutions.push_back((i<<1));
-            } else if(temp_size==maximum_merged_room_size) {
-                solutions.push_back((i<<1));
+            if(castle.wallRemovable(i, false)) {
+                castle.removeWall(i, false);
+                castle.caculate();
+                int temp_size = castle.getMaximumRoomSize();
+                if(temp_size>maximum_merged_room_size) {
+                    maximum_merged_room_size = temp_size;
+                    solutions.resize(0);
+                    solutions.push_back((i<<1));
+                } else if(temp_size==maximum_merged_room_size) {
+                    solutions.push_back((i<<1));
+                }
+                castle.addWall(i, false);
             }
-            castle.addWall(i, false);
+            if(maximum_merged_room_size==2*maximum_room_size)
+                no_search_flag=true;
         }
     }
     fout << maximum_merged_room_size << endl;
