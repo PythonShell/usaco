@@ -38,6 +38,9 @@ inline bool operator==(const Fraction f1, const Fraction f2) {
     return (f1.above==f2.above && f1.below== f2.below);
 };
 
+// this function can be easier
+// how about this:
+//      return f1.above * f2.below < f2.above * f1.below;
 inline bool operator<(const Fraction f1, const Fraction f2) {
     int n_below = getCommon(f1.below, f2.below);
     int n_above_1 = f1.above * (f2.below/n_below);
