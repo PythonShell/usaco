@@ -7,6 +7,7 @@ LANG: C++
 #include<fstream>
 #include<vector>
 #include<queue>
+#include<deque>
 using namespace std;
 
 int size_x=1;
@@ -124,31 +125,31 @@ class Castle {
             number_of_rooms = 0;
             maximum_room_size = -1;
             vector<bool> visited(size_x*size_y, false);
-            for(int i=0; i<visited.size(); i++) {
-                queue<int> to_be_visited;
+            for(int i=0, total_size=size_x*size_y; i<total_size; i++) {
                 if(!visited[i]) {
+                    deque<int> to_be_visited;
                     number_of_rooms += 1;
                     int room_size = 0;
-                    to_be_visited.push(i);
+                    to_be_visited.push_back(i);
                     while(!to_be_visited.empty()) {
                         int current = to_be_visited.front();
                         if(visited[current]) {
-                            to_be_visited.pop();
+                            to_be_visited.pop_front();
                             continue;
                         }
                         room_size += 1;
                         visited[current] = true;
                         if(!cells[current].getWest() && !visited[current-1])
-                            to_be_visited.push(current-1);
+                            to_be_visited.push_back(current-1);
                         if(!cells[current].getNorth()
                                 && !visited[current-size_x])
-                            to_be_visited.push(current-size_x);
+                            to_be_visited.push_back(current-size_x);
                         if(!cells[current].getEast() && !visited[current+1])
-                            to_be_visited.push(current+1);
+                            to_be_visited.push_back(current+1);
                         if(!cells[current].getSouth()
                                 && !visited[current+size_x])
-                            to_be_visited.push(current+size_x);
-                        to_be_visited.pop();
+                            to_be_visited.push_back(current+size_x);
+                        to_be_visited.pop_front();
                     }
                     if(room_size > maximum_room_size)
                         maximum_room_size = room_size;
