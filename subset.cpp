@@ -6,7 +6,6 @@ LANG: C++
 #include<iostream>
 #include<fstream>
 #include<vector>
-#include<deque>
 using namespace std;
 
 int main() {
@@ -21,29 +20,22 @@ int main() {
     }
     sum /= 2;
     sum -= n;
-    // code below is correct but with much more memory
-    // killed when input equals 39
-    deque<vector<int> > solutions;
-    int count=0;
-    for(int i=n-1; i>0; --i) {
-        vector<int> solution(1, i);
-        solutions.push_back(solution);
+    n = n-1;
+    vector<int> counts(sum*n, 0);
+    for(int i=0; i<n; ++i) {
+        counts[i] = 1;
     }
-    while(!solutions.empty()) {
-        vector<int> current = solutions.front();
-        int tmp_sum=0;
-        for(int i=0; i<current.size(); ++i) {
-            tmp_sum += current[i];
-        }
-        if(tmp_sum==sum) ++count;
-        solutions.pop_front();
-        if(tmp_sum>sum) continue;
-        for(int i=current.back()-1; i>0; --i) {
-            current.push_back(i);
-            solutions.push_back(current);
-            current.pop_back();
+    for(int i=1; i<sum; ++i) {
+        for(int j=1; j<n; ++j) {
+            if(j>i) {
+                counts[i*n+j] = counts[i*n+j-1];
+            } else if (j==i) {
+                counts[i*n+j] = counts[i*n+j-1] + 1;
+            } else {
+                counts[i*n+j] = counts[i*n+j-1] + counts[(i-j-1)*n+j-1];
+            }
         }
     }
-    fout << count << endl;
+    fout << counts[sum*n-1] << endl;
 	return 0;
 }
