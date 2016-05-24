@@ -30,5 +30,10 @@ int main() {
 #ifdef DEBUG
     cout << onConfig << endl << offConfig << endl;
 #endif
-	return 0;
+    unsigned long long initial = 0;
+    initial = ~initial;
+    vector<unsigned long long> result;
+    result.push_back(initial);
+    cout << endl;
+    return 0;
 }
